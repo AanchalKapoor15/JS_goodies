@@ -7,6 +7,7 @@ function upper(strings, ...values) {
             s += String(values[i - 1]).toUpperCase();
         }
         s += strings[i];
+        
     }
     return s;
 }
