@@ -104,21 +104,21 @@ var o = [];
 
 //invalid declaration
 var o = [];
-var [
-    o[0], //invalid declaration 
-o[1],
-    o[2],
-    ...o[3]
-] = data();
+// var [
+//     o[0], //invalid declaration 
+//     o[1],
+//     o[2],
+//     ...o[3]
+// ] = data();
 
 //just like the following is an invalid declaration (syntax error)
-var o[0] = 8;
+// var o[0] = 8;
 
 //
 var tmp;
 var o = [];
 tmp = [
-    o[3], //invalid declaration 
+    o[3],  
     o[4],
     o[5],
     ...o[6]
@@ -149,15 +149,15 @@ var [
 //it doesn't make any sense to do it at the end - because:
 var [
     first,
-    second, //i don't want this assignment
-    third,
-    ,
+    second, 
+    third, 
+    , //i don't want this assignment
 ] = data();
 
 //is better written as:
 var [
     first,
-    second, //i don't want this assignment
+    second, 
     third
 ] = data();
 
@@ -230,7 +230,7 @@ function data([
 ]) {
     //..
 }
-//type error
+//type error: object null is not iterable
 
 //now what is the output of the following when a null is passed to the function?
 function data([
@@ -240,7 +240,27 @@ function data([
 ] = []) {
     //..
 }
+//type error: object null is not iterable - default assignment of empty array to parameters-destructuring doesn't safeguard against null.
+
+//now what is the output of the following when a undefined is passed to the function?
+function data([
+    first = 10,
+    second = 20,
+    third = 30
+] = []) {
+    //..
+}
 //first = 10, second = 20, third = 30
+
+////now what is the output of the following when a undefined is passed to the function?
+function data([
+    first = 10,
+    second = 20,
+    third = 30
+]) {
+    //..
+}
+//TypeError: undefined is not iterable
 
 //NESTED ARRAY DESTRUCTURING
 function data() {
@@ -267,14 +287,272 @@ var [
     [
         second,
         third
+    ],
+    fourth,
+    fifth
+] = data();
+//type error: undefined is not iterable
+
+//fallback for the above error situation
+function data() {
+    return [1, undefined, 4, 5];
+}
+
+var [
+    first,
+    [
+        second,
+        third
     ] = [],
     fourth,
     fifth
 ] = data();
 
-//type error
+//now second will be undefined and so will be third
 
-//fallback for the above error situation
+//what will be the output of the following
+function data() {
+    return [1, null, 4, 5];
+}
+
+var [
+    first,
+    [
+        second,
+        third
+    ],
+    fourth,
+    fifth
+] = data();
+//type error: null is not iterable
+
+//************************OBJECT DESTRUCTURING*******************************
+//destructuring equivalent of the following:
+function data() {
+    return { a: 1, b: 2, c: 3 };
+}
+var temp = data();
+var first = temp.a;
+var second = temp.b;
+var third = temp.c;
+
+//destructuring syntax equivalent
+function data() {
+    return { a: 1, b: 2 };
+}
+
+var {
+    a: first, //source: destination
+    c: third, //the order of properties is not important, because this is an object not an array.
+    b: second
+} = data(); //eliminated the need for temp variable
+
+//what will third contain?
+//undefined
+
+//what happens to d?
+function data() {
+    return { a: 1, b: 2, c: 3, d: 4 };
+}
+
+var {
+    a: first,
+    c: third,
+    b: second
+} = data();
+//d gets ignored
+
+//collect unaccounted for properties?
+function data() {
+    return { a: 1, b: 2, c: 3, d: 4 };
+}
+
+var {
+    a: first,
+    b: second,
+    ...third
+} = data();
+
+//setting default values
+function data() {
+    return { b: 2, c: 3, d: 4 };
+}
+
+var {
+    a: first = 87, //source: target = default     
+    b: second, //property: value | here the 'property' happens to be the source and the 'value' happens to be the target
+    ...third
+} = data();
+
+//weird reverse syntax > "source: target" instead of "target : source"
+var obj = {
+    a: 1, //property: value | here the 'property' is the target and 'value' the source
+    b: 2
+}
+
+var {
+    a: first = 87,
+    b: second, //again property: value | but here the 'property' happens to be the source and the 'value' happens to be the target
+    ...third
+} = data()
+
+//**************OBJECT ASSIGNMENT DESTRUCTURING*************************
+//pre declared targets
+function data() {
+    return { b: 2, c: 3, d: 4 };
+}
+
+var first, second, third;
+// {                //the interpreter is going to confuse this syntax with block declaration
+//     b: first,
+//     c: second,
+//     d: third
+// } = data(); 
+
+//hence wrap with paranthesis
+({
+    b: first,
+    c: second,
+    d: third
+} = data());
+
+//alternatively - skip the paranthesis and add a object assignment
+var temp;
+temp = {
+    b: first,
+    c: second,
+    d: third
+} = data();
+
+//the following will again give a syntax error
+//  var temp;
+// {                
+//     b: first,
+//     c: second,
+//     d: third
+//  } = temp = data();
+//because again the interpreter will confuse the syntax with block syntax
+
+//*************************OBJECT DEFAULT ASSIGNMENT******************************
+function data() {
+    return;
+}
+var {
+    b: first,
+    c: second,
+    d: third
+} = data() || {};
+
+//output of the following:
+function data() {
+    return null;
+}
+
+var {
+a: first,
+b: second
+} = data() || {};
+
+//first => undefined, second => undefined
+
+//output of the following:
+function data() {
+    return undefined;
+}
+
+var {
+a: first,
+b: second
+} = data() || {};
+
+//first => undefined, second => undefined
+
+//***target and source have same name
+function data() {
+    return { b: 2, c: 3, d: 4 };
+}
+var {
+    b: b,
+    c: c,
+    d: d
+} = data();
+//or
+var {
+    a = 45, //grab the 'a' property from the source object - assign it to target named 'a' - give it default value if couldn't find 'a' property 
+    b,
+    c,
+    d
+} = data();
+
+//what is the output of the following:
+function data() {
+    return { b: 2, c: 3, d: 4 };
+}
+
+var {
+b,c,d, e
+}=  data();
+
+//b, c and d get usual values. e gets undefined
+
+//******************************NESTED OBJECT DESTRUCTURING**************
+//destructure the following object:
+function data() {
+    return {
+        a: 1,
+        b:
+            {
+                c: 2,
+                d: 3
+            }
+    }
+}
+var {
+    a: first,
+    b: {
+        c: second,
+        d: third
+    } = {} //default assignment
+} = data();
+
+//what will the value of x be:
+function data() {
+    return {
+        a: 1,
+        bb:
+            {
+                c: 120,
+                d: 3
+            }
+    }
+}
+var {
+    a: first,
+    bb: x = {} //default assignment
+} = data();
+
+//x => {c: 120, d: 3}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
