@@ -528,12 +528,246 @@ function data() {
 }
 var {
     a: first,
-    bb: x = {} //default assignment
+    bb: x1 = {} //default assignment
 } = data();
 
-//x => {c: 120, d: 3}
+//x1 => {c: 120, d: 3}
 
+//*************ANOTHER SCENARIO FOR DEFAULT ASSIGNMENT**********************
+//what will b end up to be:
+var o1 = {
+    a: {
+        b: 2,
+        c: 3
+    }
+};
 
+var o2 = {
+a: {}
+};
+
+var o3 = {};
+
+var {
+    a: {
+        b = 10,
+        c = 20
+    }
+} = o1;
+//b is 2
+
+//what will b end up to be now:
+var o1 = {
+    a: {
+        c: 3
+    }
+};
+
+var o2 = {
+a: {}
+};
+
+var o3 = {};
+
+var {
+    a: {
+        b = 10,
+        c = 20
+    }
+} = o1;
+//b is 10
+
+//what will b end up to be now:
+var o1 = {};
+
+var o2 = {
+a: {}
+};
+
+var o3 = {};
+
+var {
+    a: {
+        b = 10,
+        c = 20
+    }
+} = o1;
+
+//type error: cannot destructure undefined or null
+
+//what will b end up to be now:
+var o1 = {
+    a: {
+        c: 3
+    }
+};
+
+var o2 = {
+a: {}
+};
+
+var o3 = {};
+
+var {
+    a: {
+        b,
+        c
+    } = {
+        b: 10,
+        c: 20
+    }
+} = o1;
+
+//b is undefined
+
+//what will b end up to be now:
+var o1 = {
+    a: {
+        c: 3
+    }
+};
+
+var o2 = {
+a: {}
+};
+
+var o3 = {};
+
+var {
+    a: {
+        b,
+        c
+    } = {
+        b: 10,
+        c: 20
+    }
+} = o2;
+
+//b is still undefined
+
+//what will b end up to be now:
+var o1 = {
+    a: {
+        c: 3
+    }
+};
+
+var o2 = {
+a: {}
+};
+
+var o3 = {};
+
+var {
+    a: {
+        b,
+        c
+    } = {
+        b: 10,
+        c: 20
+    }
+} = o3;
+
+//now b is 10
+
+//what will b be:
+var o1 = {
+    a: {
+        c: 3
+    }
+};
+
+var o2 = {
+a: {}
+};
+
+var o3 = null;
+
+var {
+    a: {
+        b,
+        c
+    } = {
+        b: 10,
+        c: 20
+    }
+} = o3;
+//type error: cannot destructure property a of undefined or null
+
+//what will b be:
+var o1 = {
+    a: {
+        c: 3
+    }
+};
+
+var o2 = {
+a: {}
+};
+
+var o3 = undefined;
+
+var {
+    a: {
+        b,
+        c
+    } = {
+        b: 10,
+        c: 20
+    }
+} = o3;
+//type error: cannot destructure property a of undefined or null
+
+//*********PARAMETER OBJECTS***************************** */
+//better way to destructure?
+function data(tmp = {}){
+    var {
+        a,
+        b
+        } = tmp;
+}
+
+function data({
+    a,
+    b
+} = {}){
+    //logic
+}
+
+//************************NESTED OBJECT AND ARRAY DESTRUCTURING**************************/
+//get access to both the destructured object and it's properties in separate variables
+var obj = {
+    a: 1,
+    b: {
+        x: 2
+    },
+    c: 3
+};
+
+var {
+    a,
+    b,
+    b: {
+        x
+    },
+    c
+} = obj;
+
+//destructure this
+var obj = {
+    a: 1,
+    b: [500,20],
+    c: 2
+};
+
+var {
+    a,
+    b: [
+        first,
+        second
+    ] = [], //don't forget your defaults 
+    c
+} = {} = obj; //don't forget your defaults
 
 
 
