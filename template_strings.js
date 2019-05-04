@@ -739,7 +739,7 @@ function data({
 var obj = {
     a: 1,
     b: {
-        x: 2
+        x1: 2
     },
     c: 3
 };
@@ -748,7 +748,7 @@ var {
     a,
     b,
     b: {
-        x
+        x1
     },
     c
 } = obj;
@@ -763,37 +763,67 @@ var obj = {
 var {
     a,
     b: [
-        first,
+         first,
         second
     ] = [], //don't forget your defaults 
     c
 } = {} = obj; //don't forget your defaults
 
+//***********************************DESTRUCTURING EXERCISE********************** */
+var defaults = {
+	topic: "JavaScript",
+	format: "Live",
+	slides: {
+		start: 0,
+		end: 100
+	}
+};
+
+fakeAjax("http://get-the-workshop.tld",handleResponse);
 
 
+// *******************************************************
 
 
+function handleResponse({
+    topic = "JavaScript",
+    format = "Live",
+    slides: {
+        start = 0,
+		end = 100
+     } = {}
+} = {}) {
+
+	TestCase({
+        topic,
+        format,
+        slides: {
+            start,
+            end
+        }
+	});
+
+}
+
+function TestCase(data) {
+	console.log(
+		data.topic == "JS Recent Parts" &&
+		data.format == "Live" &&
+		data.slides.start === 0 &&
+		data.slides.end == 77
+	);
+}
 
 
+// *******************************************************
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function fakeAjax(url,cb) {
+	// fake ajax response:
+	cb({
+		topic: "JS Recent Parts",
+		slides: {
+			end: 77
+		}
+	});
+}
