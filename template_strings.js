@@ -118,7 +118,7 @@ var o = [];
 var tmp;
 var o = [];
 tmp = [
-    o[3],  
+    o[3],
     o[4],
     o[5],
     ...o[6]
@@ -149,15 +149,15 @@ var [
 //it doesn't make any sense to do it at the end - because:
 var [
     first,
-    second, 
-    third, 
+    second,
+    third,
     , //i don't want this assignment
 ] = data();
 
 //is better written as:
 var [
     first,
-    second, 
+    second,
     third
 ] = data();
 
@@ -222,17 +222,7 @@ function data([
     //..
 }
 
-////what is the output of the following when a null is passed to the function?
-function data([
-    first = 10,
-    second = 20,
-    third = 30
-]) {
-    //..
-}
-//type error: object null is not iterable
-
-//now what is the output of the following when a null is passed to the function?
+//what is the output of the following when a null is passed to the function?
 function data([
     first = 10,
     second = 20,
@@ -449,8 +439,8 @@ function data() {
 }
 
 var {
-a: first,
-b: second
+    a: first,
+    b: second
 } = data() || {};
 
 //first => undefined, second => undefined
@@ -461,8 +451,8 @@ function data() {
 }
 
 var {
-a: first,
-b: second
+    a: first,
+    b: second
 } = data() || {};
 
 //first => undefined, second => undefined
@@ -490,8 +480,8 @@ function data() {
 }
 
 var {
-b,c,d, e
-}=  data();
+    b, c, d, e
+} = data();
 
 //b, c and d get usual values. e gets undefined
 
@@ -543,7 +533,7 @@ var o1 = {
 };
 
 var o2 = {
-a: {}
+    a: {}
 };
 
 var o3 = {};
@@ -564,7 +554,7 @@ var o1 = {
 };
 
 var o2 = {
-a: {}
+    a: {}
 };
 
 var o3 = {};
@@ -581,7 +571,7 @@ var {
 var o1 = {};
 
 var o2 = {
-a: {}
+    a: {}
 };
 
 var o3 = {};
@@ -603,7 +593,7 @@ var o1 = {
 };
 
 var o2 = {
-a: {}
+    a: {}
 };
 
 var o3 = {};
@@ -628,7 +618,7 @@ var o1 = {
 };
 
 var o2 = {
-a: {}
+    a: {}
 };
 
 var o3 = {};
@@ -653,7 +643,7 @@ var o1 = {
 };
 
 var o2 = {
-a: {}
+    a: {}
 };
 
 var o3 = {};
@@ -678,7 +668,7 @@ var o1 = {
 };
 
 var o2 = {
-a: {}
+    a: {}
 };
 
 var o3 = null;
@@ -702,7 +692,7 @@ var o1 = {
 };
 
 var o2 = {
-a: {}
+    a: {}
 };
 
 var o3 = undefined;
@@ -720,17 +710,17 @@ var {
 
 //*********PARAMETER OBJECTS***************************** */
 //better way to destructure?
-function data(tmp = {}){
+function data(tmp = {}) {
     var {
         a,
         b
-        } = tmp;
+    } = tmp;
 }
 
 function data({
     a,
     b
-} = {}){
+} = {}) {
     //logic
 }
 
@@ -756,14 +746,14 @@ var {
 //destructure this
 var obj = {
     a: 1,
-    b: [500,20],
+    b: [500, 20],
     c: 2
 };
 
 var {
     a,
     b: [
-         first,
+        first,
         second
     ] = [], //don't forget your defaults 
     c
@@ -771,15 +761,15 @@ var {
 
 //***********************************DESTRUCTURING EXERCISE********************** */
 var defaults = {
-	topic: "JavaScript",
-	format: "Live",
-	slides: {
-		start: 0,
-		end: 100
-	}
+    topic: "JavaScript",
+    format: "Live",
+    slides: {
+        start: 0,
+        end: 100
+    }
 };
 
-fakeAjax("http://get-the-workshop.tld",handleResponse);
+fakeAjax("http://get-the-workshop.tld", handleResponse);
 
 
 // *******************************************************
@@ -790,40 +780,145 @@ function handleResponse({
     format = "Live",
     slides: {
         start = 0,
-		end = 100
-     } = {}
+        end = 100
+    } = {}
 } = {}) {
 
-	TestCase({
+    TestCase({
         topic,
         format,
         slides: {
             start,
             end
         }
-	});
+    });
 
 }
 
 function TestCase(data) {
-	console.log(
-		data.topic == "JS Recent Parts" &&
-		data.format == "Live" &&
-		data.slides.start === 0 &&
-		data.slides.end == 77
-	);
+    console.log(
+        data.topic == "JS Recent Parts" &&
+        data.format == "Live" &&
+        data.slides.start === 0 &&
+        data.slides.end == 77
+    );
 }
 
 
 // *******************************************************
 
 
-function fakeAjax(url,cb) {
-	// fake ajax response:
-	cb({
-		topic: "JS Recent Parts",
-		slides: {
-			end: 77
-		}
-	});
+function fakeAjax(url, cb) {
+    // fake ajax response:
+    cb({
+        topic: "JS Recent Parts",
+        slides: {
+            end: 77
+        }
+    });
 }
+
+//************** #1 USE CASE: NAMED ARGUMENTS | DESTRUCTURING PATTERN*****************************************************
+
+//definition | classic way
+function lookUpRecord(store = "someDefault", id = -1) {
+    //...
+}
+
+//definition | an alternate way
+function lookUpRecord({
+    store = "someDefault",
+    id = -1
+}) {
+    //...
+}
+
+//invocation
+lookUpRecord({ store: "HyperCity", id: 5 });
+
+//******************************************************* #2 USE CASE: DESTRUCTURING AND RESTRUCTURING ******************************
+
+//IMPLICIT APPROACH
+var defaults = {
+    url: "http://some.base.url/api",
+    method: "post",
+    headers: [
+        "Content-type : text"
+    ]
+};
+
+    var settings = {
+        url: "http://some.other.url/",
+        data: 42,
+        callback: function (resp) {
+            //...
+        }
+    };
+
+ajax(_.extend({}, defaults, settings));
+
+//DECLARATIVE APPROACH
+
+//Defining the mixing algorithm
+function ajaxOptions({
+    url = "http://some.base.url/api",
+    method = "post",
+    data,
+    callback,
+    headers: [
+        header1 = "Content-type : text",
+        ...otherHeaders
+    ] = [] //don't miss your defaults
+} = {}  //don't miss your defaults
+) {
+return {
+    url,
+    method,
+    data,
+    callback,
+    headers: [
+        header1,
+        ...otherHeaders
+    ]
+};
+}
+
+//using the mixing algorithm
+
+//need only the defaults? invoke the algorithm without parameters
+var defaults = ajaxOptions();
+
+//need the mixed settings? pass in a settings object
+var settings = {
+    url: "http://some.other.url/",
+    data: 42,
+    callback: function (resp) {
+        //...
+    },
+    headers: [
+        'header1',
+        'header2',
+        'header3    '
+    ]
+
+};
+
+function ajax(obj){
+        console.log(obj.headers[1]);
+}
+
+ajax(ajaxOptions(settings));
+//***********************************FIND, FINDINDEX AND INCLUDES*/
+//Output of the following:
+var arr = [{ a: 1 }, { a: 2 }, { a: 3 }];
+var op1 = arr.find(function match(v) {
+    return v && v.a > 0;
+});
+
+var op2 = arr.includes({a:1});
+
+console.log(op1);
+console.log(op2);
+
+//output of the following:
+
